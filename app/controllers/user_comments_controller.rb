@@ -1,10 +1,9 @@
 class UserCommentsController < ApplicationController
 	def create
 		@user_comment = current_user.user_comments.build(user_comment_params)
-		@picture = Picture.find_by(@user_comment.id)
 		if @user_comment.save
 			flash[:notice] = "Added comment"
-			redirect_to picture_path(@picture)
+			redirect_to root_path
 		else
 			flash[:error] = "Not added"
 			redirect_to root_path

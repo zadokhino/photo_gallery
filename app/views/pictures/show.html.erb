@@ -1,6 +1,6 @@
 <h1><%= @picture.title %></h1>
 <% sum = 0 %>
-<% @picture.user_comments.each do |comment| %>
+<% @user_comments.each do |comment| %>
 	<% sum += comment.score.to_f %>
 <% end %>
 
@@ -11,10 +11,13 @@
 </div>
 <div class="row">
 	<div class="col-md-3 col-md-offset-2">
-		Avarage score: <strong><%= sum / @picture.user_comments.count %> </strong>
+		<% if @picture.user_comments.count != 0 %>
+			Avarage score: <strong><%= sum / @picture.user_comments.count %> </strong>
+		<% end %>
 	</div>
 </div>
-<% @picture.user_comments.each do |comment| %>
+
+<% @user_comments.each do |comment| %>
 	<div class="row">
 		<div class="col-md-3 col-md-offset-2">
 			name: <strong><%= comment.user.name %></strong>
@@ -32,21 +35,23 @@
 	</div>
 <% end %>
 
-<%= form_for @user_comment, url: user_comments_path, html: {class: 'form-horizontal'} do |f| %>
-	<div class="form-group <%= 'has-error' if @user_comment.errors[:text].any? %>">
-	    <div class="col-sm-offset-3 col-sm-6">
-	        Text: <%= f.text_area :text, class: 'form-control' %>
-	    </div>
-	</div>
+<% if user_signed_in? %>
+	<%= form_for @user_comment, url: user_comments_path, html: {class: 'form-horizontal'} do |f| %>
 		<div class="form-group <%= 'has-error' if @user_comment.errors[:text].any? %>">
-	    <div class="col-sm-offset-3 col-sm-6">
-	       Score: <%= f.select :score, options_for_select((1..5).step(1)) %>
-	    </div>
-	</div>
-		<%= f.hidden_field :picture_id, value: @picture.id %>
-	<div class="form-group">
-	    <div class="col-sm-offset-3 col-sm-10">
-	        <%= f.submit "Add comment" %>
-	    </div>
-	</div>
+		    <div class="col-sm-offset-3 col-sm-6">
+		        Text: <%= f.text_area :text, class: 'form-control' %>
+		    </div>
+		</div>
+			<div class="form-group <%= 'has-error' if @user_comment.errors[:text].any? %>">
+		    <div class="col-sm-offset-3 col-sm-6">
+		       Score: <%= f.select :score, options_for_select((1..5).step(1)) %>
+		    </div>
+		</div>
+			<%= f.hidden_field :picture_id, value: @picture.id %>
+		<div class="form-group">
+		    <div class="col-sm-offset-3 col-sm-10">
+		        <%= f.submit "Add comment" %>
+		    </div>
+		</div>
+	<% end %>
 <% end %>

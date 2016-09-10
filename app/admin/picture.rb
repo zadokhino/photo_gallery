@@ -10,6 +10,28 @@ ActiveAdmin.register Picture do
 		f.actions
 	end
 
+	index do
+		selectable_column
+		id_column
+		column :image do |picture|
+			image_tag picture.image.url(:thumb)
+		end
+		column :title
+		column :user
+		actions
+	end
+
+	show do
+		attributes_table do
+			row :image do |picture|
+		 		image_tag picture.image.url(:medium)
+			end
+			row :title
+			row :user
+		end
+		active_admin_comments
+	end
+
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #

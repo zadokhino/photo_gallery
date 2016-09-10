@@ -6,6 +6,7 @@ class PicturesController < ApplicationController
 	def show
 		@picture = Picture.find(params[:id])
 		@user_comment = UserComment.new
+		@user_comments = @picture.user_comments.order('created_at DESC')
 	end
 
 	def new

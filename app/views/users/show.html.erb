@@ -7,31 +7,35 @@
 	</div>
 	<div class="row">
 		<div class="col-md-3">
-			<%= image_tag picture.image.url(:medium) %>
+			<%= link_to image_tag(picture.image.url(:medium)), picture_path(picture) %>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-3">
-			<%= link_to 'Delete', picture_path(picture), 
-			method: :delete, data: {confirm: 'Do you want to remove this picture?'} %>
+			<% if @user == current_user && user_signed_in? %>
+				<%= link_to 'Delete', picture_path(picture), 
+				method: :delete, data: {confirm: 'Do you want to remove this picture?'} %>
+			<% end %>
 		</div>
 	</div>
 <% end %>
 
-<%= form_for @picture, url: pictures_path, html: { multipart: true } do |f| %>
-    <div class="form-group <%= 'has-error' if @picture.errors[:title].any? %>">
-        <div class="col-sm-offset-3 col-sm-6">
-            <%= f.text_area :title, class: 'form-control' %>
-        </div>
-    </div>
-        <div class="form-group <%= 'has-error' if @picture.errors[:image].any? %>">
-        <div class="col-sm-offset-3 col-sm-6">
-            <%= f.file_field :image, class: 'form-control' %>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-10">
-            <%= f.submit "Add", class: 'btn btn-primary' %>
-        </div>
-    </div>
+<% if @user == current_user && user_signed_in? %>
+	<%= form_for @picture, url: pictures_path, html: { multipart: true } do |f| %>
+		<div class="form-group <%= 'has-error' if @picture.errors[:title].any? %>">
+		    <div class="col-sm-offset-3 col-sm-6">
+		        <%= f.text_area :title, class: 'form-control' %>
+		    </div>
+		</div>
+		    <div class="form-group <%= 'has-error' if @picture.errors[:image].any? %>">
+		    <div class="col-sm-offset-3 col-sm-6">
+		        <%= f.file_field :image, class: 'form-control' %>
+		    </div>
+		</div>
+		<div class="form-group">
+		    <div class="col-sm-offset-3 col-sm-10">
+		        <%= f.submit "Add", class: 'btn btn-primary' %>
+		    </div>
+		</div>
+	<% end %>   
 <% end %>   
