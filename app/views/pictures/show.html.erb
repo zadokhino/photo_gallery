@@ -1,6 +1,52 @@
 <h1><%= @picture.title %></h1>
+<% sum = 0 %>
+<% @picture.user_comments.each do |comment| %>
+	<% sum += comment.score.to_f %>
+<% end %>
+
 <div class="row">
 	<div class="col-md-3 col-md-offset-2">
 		<%= image_tag @picture.image.url(:original) %>
 	</div>
 </div>
+<div class="row">
+	<div class="col-md-3 col-md-offset-2">
+		Avarage score: <strong><%= sum / @picture.user_comments.count %> </strong>
+	</div>
+</div>
+<% @picture.user_comments.each do |comment| %>
+	<div class="row">
+		<div class="col-md-3 col-md-offset-2">
+			name: <strong><%= comment.user.name %></strong>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3 col-md-offset-2">
+			text: <i><%= comment.text %></i>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3 col-md-offset-2">
+			score: <%= comment.score %>
+		</div>
+	</div>
+<% end %>
+
+<%= form_for @user_comment, url: user_comments_path, html: {class: 'form-horizontal'} do |f| %>
+	<div class="form-group <%= 'has-error' if @user_comment.errors[:text].any? %>">
+	    <div class="col-sm-offset-3 col-sm-6">
+	        Text: <%= f.text_area :text, class: 'form-control' %>
+	    </div>
+	</div>
+		<div class="form-group <%= 'has-error' if @user_comment.errors[:text].any? %>">
+	    <div class="col-sm-offset-3 col-sm-6">
+	       Score: <%= f.select :score, options_for_select((1..5).step(1)) %>
+	    </div>
+	</div>
+		<%= f.hidden_field :picture_id, value: @picture.id %>
+	<div class="form-group">
+	    <div class="col-sm-offset-3 col-sm-10">
+	        <%= f.submit "Add comment" %>
+	    </div>
+	</div>
+<% end %>
