@@ -12,7 +12,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-3">
-			Author: <%= picture.user.name %>
+			Author: <%= link_to picture.user.name, user_path(picture.user) %>
 		</div>
 	</div>
 <% end %>
