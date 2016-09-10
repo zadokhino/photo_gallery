@@ -1,4 +1,14 @@
 ActiveAdmin.register Picture do
+	permit_params :user_id, :title, :image
+
+	form do |f|
+		f.inputs do
+			f.input :user
+			f.input :title
+			f.input :image, :as => :file, :hint => image_tag(f.object.image.url(:thumb))
+		end
+		f.actions
+	end
 
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
